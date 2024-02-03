@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+model Profile{
+  id String @id @default(uuid()) @map("_id") @db.ObjectId
+  userId String @unique
+  name String
+  imageUrl String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  servers Server[]
+  members Member[]
+}
+
+model Server {
+  id String @id @default(uuid()) @map("_id") @db.ObjectId
+  name String
+  imageUrl String
+  inviteCode String
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id],onDelete:Cascade)
+  members Member[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum MemberRole{
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+model Member {
+  id String @id @default(uuid()) @map("_id") @db.ObjectId
+  role MemberRole @default(GUEST)
+  profileId String
+  profile Profile @relation(fields: [profileId],references: [id],onDelete:Cascade)
+  serverId String
+  server Server @relation(fields: [serverId],references: [id],onDelete:Cascade)
+}
