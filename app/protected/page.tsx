@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/ui/themeToggle";
 import { UserButton } from "@clerk/nextjs";
 
 export default function Home() {
@@ -8,7 +9,7 @@ export default function Home() {
      <h1>Dicord-clone</h1>
 
       <UserButton afterSignOutUrl="/"/>
-      <Button>Click me</Button>
+      <ModeToggle/>
      </div>
     </>
   )
